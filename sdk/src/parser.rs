@@ -66,7 +66,7 @@ impl ParserBuilder {
                 return Err(ParseError::UnknownAccountType("Wrong discriminator".to_string()));
             }
             
-            let mut data_slice = &data[8..];
+            let mut data_slice = &data[..];
             let account = T::try_deserialize(&mut data_slice)
                 .map_err(|e| ParseError::DeserializationFailed(e.to_string()))?;
             

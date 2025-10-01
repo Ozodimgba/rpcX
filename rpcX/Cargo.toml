@@ -1,0 +1,22 @@
+[package]
+name = "solana-rpcX"
+version = "0.1.0"
+edition = "2024"
+
+# [[bin]]
+# name = "debug_discriminator"
+# path = "examples/debug_discriminator.rs"
+
+[dependencies]
+wasmtime = "26.0.0"
+wasmtime-wasi = "26.0.0"
+wit-bindgen-rt = { version = "0.44.0", features = ["bitflags"] }
+anyhow = "1.0"
+serde_json = { workspace = true }
+sha2 = { workspace = true }
+
+solana-rpcx-bindings = { path = "../solana-rpcx-bindings" }
+
+reqwest = { version = "0.12", features = ["json"] }
+tokio = { version = "1", features = ["full"] }
+base64 = "0.22"

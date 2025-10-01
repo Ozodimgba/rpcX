@@ -35,7 +35,7 @@ fn split_wallet_to_json(wallet: &SplitWallet) -> Result<String, String> {
 
 static PARSER: Lazy<Parser> = Lazy::new(|| {
     ParserBuilder::new(TENTACLES_PROGRAM_ID.to_string())
-        .register_anchor_account(split_wallet_to_json)
+        .register_anchor_account::<SplitWallet, _>(split_wallet_to_json)
         .with_metadata(ProgramMetadata {
             name: Some("Tentacles".to_string()),
             program_id: Some(TENTACLES_PROGRAM_ID.to_string()),
