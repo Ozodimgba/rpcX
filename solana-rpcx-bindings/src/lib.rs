@@ -2,7 +2,7 @@
 // It does NOT implement Guest traits - 
 
 #[allow(warnings)]
-mod bindings;
+pub mod bindings;
 
 // Re-export everything so SDK and users can access it
 pub use bindings::*;

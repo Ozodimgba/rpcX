@@ -1,0 +1,15 @@
+[package]
+name = "tentacles-parser"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib"] 
+
+[dependencies]
+solana-rpcx-sdk = { path = "../../sdk", features = ["anchor"] }
+tentacles = { path = "../../programs/tentacles" }
+
+once_cell = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }

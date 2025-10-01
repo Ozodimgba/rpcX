@@ -47,16 +47,37 @@ impl ParserBuilder {
     }
     
     /// Register an Anchor account (8-byte discriminator + Borsh)
-    pub fn register_anchor_account<T>(mut self) -> Self
+    #[cfg(feature = "anchor")]
+    pub fn register_anchor_account<T, F>(mut self, to_json: F) -> Self
     where
-        T: borsh::BorshDeserialize + serde::Serialize + 'static,
+        T: anchor_lang::AccountDeserialize + 'static,
+        F: Fn(&T) -> Result<String, String> + Send + Sync + 'static,
     {
         let type_name = extract_type_name::<T>();
+        let type_name_clone = type_name.clone(); // Tech debt: Lazy code
         let discriminator = crate::compute_anchor_discriminator("account", &type_name);
-        let type_name_clone = type_name.clone();
         
         let parser: AccountParserFn = Box::new(move |data: &[u8]| {
-            parse_anchor_account::<T>(data, &type_name_clone, &discriminator)
+            if data.len() < 8 {
+                return Err(ParseError::InsufficientData("Account data too short".to_string()));
+            }
+            
+            if &data[0..8] != &discriminator {
+                return Err(ParseError::UnknownAccountType("Wrong discriminator".to_string()));
+            }
+            
+            let mut data_slice = &data[8..];
+            let account = T::try_deserialize(&mut data_slice)
+                .map_err(|e| ParseError::DeserializationFailed(e.to_string()))?;
+            
+            let json = to_json(&account)
+                .map_err(|e| ParseError::InvalidData(e))?;
+            
+            Ok(ParsedAccount {
+                account_type: type_name_clone.clone(),
+                data: json,
+                discriminator: Some(discriminator.to_vec()),
+            })
         });
         
         self.account_parsers.push(AccountParserConfig {

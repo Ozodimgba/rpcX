@@ -2173,6 +2173,7 @@ pub mod exports {
                     /// Get program metadata
                     fn get_program_metadata() -> Option<ProgramMetadata>;
                 }
+                #[macro_export]
                 #[doc(hidden)]
                 macro_rules! __export_component_solana_rpcx_bindings_program_parser_cabi {
                     ($ty:ident with_types_in $($path_to_types:tt)*) => {
@@ -2260,7 +2261,7 @@ pub mod exports {
                     };
                 }
                 #[doc(hidden)]
-                pub(crate) use __export_component_solana_rpcx_bindings_program_parser_cabi;
+                pub use __export_component_solana_rpcx_bindings_program_parser_cabi;
                 #[cfg_attr(target_pointer_width = "64", repr(align(8)))]
                 #[cfg_attr(target_pointer_width = "32", repr(align(4)))]
                 struct _RetArea(
@@ -2419,6 +2420,7 @@ pub mod exports {
                         params: _rt::String,
                     ) -> Result<_rt::String, _rt::String>;
                 }
+                #[macro_export]
                 #[doc(hidden)]
                 macro_rules! __export_component_solana_rpcx_bindings_accounts_transformer_cabi {
                     ($ty:ident with_types_in $($path_to_types:tt)*) => {
@@ -2436,7 +2438,7 @@ pub mod exports {
                     };
                 }
                 #[doc(hidden)]
-                pub(crate) use __export_component_solana_rpcx_bindings_accounts_transformer_cabi;
+                pub use __export_component_solana_rpcx_bindings_accounts_transformer_cabi;
                 #[cfg_attr(target_pointer_width = "64", repr(align(8)))]
                 #[cfg_attr(target_pointer_width = "32", repr(align(4)))]
                 struct _RetArea(
@@ -2778,6 +2780,7 @@ pub mod exports {
                     /// The RPC will fetch these accounts and pass them to transform-accounts
                     fn setup() -> TransformerRequest;
                 }
+                #[macro_export]
                 #[doc(hidden)]
                 macro_rules! __export_component_solana_rpcx_bindings_accounts_transformer_setup_cabi {
                     ($ty:ident with_types_in $($path_to_types:tt)*) => {
@@ -2793,7 +2796,7 @@ pub mod exports {
                     };
                 }
                 #[doc(hidden)]
-                pub(crate) use __export_component_solana_rpcx_bindings_accounts_transformer_setup_cabi;
+                pub use __export_component_solana_rpcx_bindings_accounts_transformer_setup_cabi;
                 #[cfg_attr(target_pointer_width = "64", repr(align(8)))]
                 #[cfg_attr(target_pointer_width = "32", repr(align(4)))]
                 struct _RetArea(
@@ -3004,6 +3007,7 @@ pub mod exports {
                         params: _rt::String,
                     ) -> Result<_rt::String, _rt::String>;
                 }
+                #[macro_export]
                 #[doc(hidden)]
                 macro_rules! __export_component_solana_rpcx_bindings_transaction_transformer_cabi {
                     ($ty:ident with_types_in $($path_to_types:tt)*) => {
@@ -3023,7 +3027,7 @@ pub mod exports {
                     };
                 }
                 #[doc(hidden)]
-                pub(crate) use __export_component_solana_rpcx_bindings_transaction_transformer_cabi;
+                pub use __export_component_solana_rpcx_bindings_transaction_transformer_cabi;
                 #[cfg_attr(target_pointer_width = "64", repr(align(8)))]
                 #[cfg_attr(target_pointer_width = "32", repr(align(4)))]
                 struct _RetArea(
@@ -3130,6 +3134,7 @@ pub mod exports {
                         params: _rt::String,
                     ) -> Result<_rt::String, _rt::String>;
                 }
+                #[macro_export]
                 #[doc(hidden)]
                 macro_rules! __export_component_solana_rpcx_bindings_view_function_cabi {
                     ($ty:ident with_types_in $($path_to_types:tt)*) => {
@@ -3145,7 +3150,7 @@ pub mod exports {
                     };
                 }
                 #[doc(hidden)]
-                pub(crate) use __export_component_solana_rpcx_bindings_view_function_cabi;
+                pub use __export_component_solana_rpcx_bindings_view_function_cabi;
                 #[cfg_attr(target_pointer_width = "64", repr(align(8)))]
                 #[cfg_attr(target_pointer_width = "32", repr(align(4)))]
                 struct _RetArea(
@@ -3221,6 +3226,7 @@ mod _rt {
 ///
 /// export!(MyType);
 /// ```
+#[macro_export]
 #[allow(unused_macros)]
 #[doc(hidden)]
 macro_rules! __export_full_parser_impl {
@@ -3251,7 +3257,7 @@ macro_rules! __export_full_parser_impl {
     };
 }
 #[doc(inline)]
-pub(crate) use __export_full_parser_impl as export;
+pub use __export_full_parser_impl as export;
 #[cfg(target_arch = "wasm32")]
 #[unsafe(
     link_section = "component-type:wit-bindgen:0.41.0:component:solana-rpcx-bindings:full-parser:encoded world"
