@@ -1,0 +1,8 @@
+[workspace]
+members = [ "macros", 
+    "sdk",
+    "solana-rpcx-bindings",
+]
+resolver = "2"
+
+[workspace.dependencies]
