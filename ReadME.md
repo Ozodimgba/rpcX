@@ -110,8 +110,16 @@ cd ../../rpcX
 ACCOUNT_ADDRESS=<address> RPC_URL=<rpc-url> cargo run
 ```
 
-## Demo
-![Logo](./Demo_Screenshot.png)
+## What does rpcX do?
+### Problem
+When reading data from the chain using the current JSON_RPC, the data returned is encoded and in not human readable form. It has to be deserialized using client-side libraries specific to each program. This creates unnecessary work for protocol developers who must maintain client code in multiple languages, and imposes limitations on integrators who are forced to use whatever clients the team provides or write their own. Response is typically like this:
+
+![Current](./images/Solana_rpc.png)
+
+### Solution
+rpcX eliminates this problem by enabling custom parsing of on-chain data directly at the RPC level. With rpcX packages deployed to Solana RPC nodes, anyone can fetch parsed, human-readable JSON responses instead of raw bytes, no client-side deserialization required.
+
+![Demo](./images/Demo_Screenshot.png)
 
 ## Supported Account Types
 
