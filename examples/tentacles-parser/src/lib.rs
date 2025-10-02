@@ -1,3 +1,67 @@
+//! # Tentacles Parser - RPCX Package Example
+//!
+//! This example demonstrates how to build an rpcX package for parsing Tentacles
+//! program accounts using the Solana RPCX SDK.
+//!
+//! ## Custom Account Parser Example
+//!
+//! While this example uses `register_anchor_account` for simplicity, you can also
+//! use `register_custom_account` for full control over parsing logic:
+//!
+//! ```rust
+//! use solana_rpcx_sdk::prelude::*;
+//! use once_cell::sync::Lazy;
+//! use tentacles::state::SplitWallet;
+//! use tentacles::ID as TENTACLES_PROGRAM_ID;
+//!
+//! static PARSER: Lazy<Parser> = Lazy::new(|| {
+//!     ParserBuilder::new(TENTACLES_PROGRAM_ID.to_string())
+//!         // Add any custom parsing logic
+//!         .register_custom_account(
+//!             "SplitWallet",
+//!             Some(compute_anchor_discriminator("account", "SplitWallet").to_vec()),
+//!             |data: &[u8]| {
+//!                 // Validate minimum length
+//!                 if data.len() < 8 {
+//!                     return Err(ParseError::InsufficientData("Too short".to_string()));
+//!                 }
+//!                 
+//!                 // Check discriminator matches
+//!                 let discriminator = compute_anchor_discriminator("account", "SplitWallet");
+//!                 if &data[0..8] != &discriminator {
+//!                     return Err(ParseError::UnknownAccountType("Wrong discriminator".to_string()));
+//!                 }
+//!                 
+//!                 // Deserialize using Anchor's try_deserialize
+//!                 // Note: AnchorDeserialize needs a mutable reference to the slice
+//!                 let mut data_slice = &data[8..];
+//!                 let wallet = SplitWallet::try_deserialize(&mut data_slice)
+//!                     .map_err(|e| ParseError::DeserializationFailed(e.to_string()))?;
+//!                 
+//!                 // Convert to JSON using your custom function
+//!                 let json = split_wallet_to_json(&wallet)
+//!                     .map_err(|e| ParseError::InvalidData(e))?;
+//!                 
+//!                 Ok(ParsedAccount {
+//!                     account_type: "SplitWallet".to_string(),
+//!                     data: json,
+//!                     discriminator: Some(discriminator.to_vec()),
+//!                 })
+//!             }
+//!         )
+//!         .with_metadata(ProgramMetadata {
+//!             name: Some("Tentacles".to_string()),
+//!             program_id: Some(TENTACLES_PROGRAM_ID.to_string()),
+//!             project_url: Some("https://github.com/Ozodimgba/tentacles".to_string()),
+//!             version: Some("1.0.0".to_string()),
+//!         })
+//!         .build()
+//! });
+//! ```
+//!
+//! This custom approach is equivalent to `register_anchor_account` but provides
+//! more flexibility for custom validation or error handling logic.
+
 use solana_rpcx_sdk::prelude::*;
 use once_cell::sync::Lazy;
 use tentacles::state::{SplitWallet};
@@ -127,43 +191,3 @@ impl ViewFunctionGuest for Component {
 }
 
 solana_rpcx_sdk::bindings::export!(Component with_types_in solana_rpcx_sdk::bindings);
-
-
-// static PARSER: Lazy<Parser> = Lazy::new(|| {
-//     ParserBuilder::new(TENTACLES_PROGRAM_ID.to_string())
-//         .register_custom_account(
-//             "SplitWallet",
-//             Some(compute_anchor_discriminator("account", "SplitWallet").to_vec()),
-//             |data: &[u8]| {
-//                 if data.len() < 8 {
-//                     return Err(ParseError::InsufficientData("Too short".to_string()));
-//                 }
-                
-//                 let discriminator = compute_anchor_discriminator("account", "SplitWallet");
-//                 if &data[0..8] != &discriminator {
-//                     return Err(ParseError::UnknownAccountType("Wrong discriminator".to_string()));
-//                 }
-                
-//                 // Use AnchorDeserialize, need mutable reference to slice
-//                 let mut data_slice = &data[8..];
-//                 let wallet = SplitWallet::try_deserialize(&mut data_slice)
-//                     .map_err(|e| ParseError::DeserializationFailed(e.to_string()))?;
-                
-//                 let json = split_wallet_to_json(&wallet)
-//                     .map_err(|e| ParseError::InvalidData(e))?;
-                
-//                 Ok(ParsedAccount {
-//                     account_type: "SplitWallet".to_string(),
-//                     data: json,
-//                     discriminator: Some(discriminator.to_vec()),
-//                 })
-//             }
-//         )
-//         .with_metadata(ProgramMetadata {
-//             name: Some("Tentacles".to_string()),
-//             program_id: Some(TENTACLES_PROGRAM_ID.to_string()),
-//             project_url: Some("https://github.com/Ozodimgba/tentacles".to_string()),
-//             version: Some("1.0.0".to_string()),
-//         })
-//         .build()
-// });
