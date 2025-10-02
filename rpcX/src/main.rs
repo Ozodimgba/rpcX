@@ -84,7 +84,7 @@ async fn main() -> Result<()> {
     let rpc_url = std::env::var("RPC_URL")
         .unwrap_or_else(|_| "https://mainnet.helius-rpc.com".to_string());
     
-    println!("  RPC: {}", rpc_url);
+    println!("  RPC: https://mainnet.helius-rpc.com");
     println!("  Account: {}\n", account_pubkey);
     
     // Fetch account info
